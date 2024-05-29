@@ -14,7 +14,7 @@ const Testmonials = () => {
   const [reviews, setReviews] = useState([]); // Initialize with an empty array
 
   useEffect(() => {
-    fetch("reviews.json")
+    fetch("http://localhost:5000/review")
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);

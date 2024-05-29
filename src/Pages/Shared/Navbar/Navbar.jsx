@@ -1,6 +1,21 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProviders";
+import { TiShoppingCart } from "react-icons/ti";
+import useCart from "../../../Hooks/useCart";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const [cart] = useCart();
+  const handleLogOut = () => {
+    logOut()
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const navLink = (
     <>
       <li>
@@ -10,12 +25,42 @@ const Navbar = () => {
         <Link to="/menu">Our Menu</Link>
       </li>
       <li>
-        <Link to="/order/salad">Order Now</Link>
+        <Link to="/order/salads">Order Now</Link>
       </li>
+      <li>
+        <Link to="/dashboard/cart">
+          <div className="flex justify-center gap-2">
+            <TiShoppingCart className="text-2xl" />
+            <div className="badge badge-secondary">+{cart.length}</div>
+          </div>
+        </Link>
+      </li>
+
+      {user ? (
+        <div className="flex justify-center items-center gap-3">
+          <button onClick={handleLogOut}>
+            LogOut
+          </button>
+          <div className="w-10">
+            <img className="rounded-full"
+              src={
+                user?.photoURL ||
+                "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+              }
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </>
+      )}
     </>
   );
   return (
-    <div className="navbar fixed z-10 opacity-30 bg-black text-white">
+    <div className="navbar fixed z-10 opacity-50 bg-black text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -43,12 +88,12 @@ const Navbar = () => {
         </div>
         <a className="btn btn-ghost text-xl">Bistro Boss</a>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      <div className="navbar-end hidden lg:flex justify-center items-center">
         <ul className="menu menu-horizontal px-1">{navLink}</ul>
       </div>
-      <div className="navbar-end">
+      {/* <div className="navbar-end">
         <button className="btn btn-outline btn-warning">Appointment</button>
-      </div>
+      </div> */}
     </div>
   );
 };
