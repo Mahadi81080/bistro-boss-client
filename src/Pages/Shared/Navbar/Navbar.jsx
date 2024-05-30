@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders";
 import { TiShoppingCart } from "react-icons/ti";
 import useCart from "../../../Hooks/useCart";
+import useAdmin from "../../../Hooks/useAdmin";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [isAdmin] = useAdmin();
   const [cart] = useCart();
   const handleLogOut = () => {
     logOut()
@@ -27,6 +29,17 @@ const Navbar = () => {
       <li>
         <Link to="/order/salads">Order Now</Link>
       </li>
+      {user && isAdmin && (
+        <li>
+          {" "}
+          <Link to="/dashboard/adminHome">DASHBOARD</Link>
+        </li>
+      )}
+      {user && !isAdmin && (
+        <li>
+          <Link to="/dashboard/userHome">DASHBOARD</Link>
+        </li>
+      )}
       <li>
         <Link to="/dashboard/cart">
           <div className="flex justify-center gap-2">
@@ -38,11 +51,10 @@ const Navbar = () => {
 
       {user ? (
         <div className="flex justify-center items-center gap-3">
-          <button onClick={handleLogOut}>
-            LogOut
-          </button>
+          <button onClick={handleLogOut}>LogOut</button>
           <div className="w-10">
-            <img className="rounded-full"
+            <img
+              className="rounded-full"
               src={
                 user?.photoURL ||
                 "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"

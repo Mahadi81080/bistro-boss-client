@@ -2,9 +2,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-
   signInWithEmailAndPassword,
-
   signInWithPopup,
   signOut,
   updateProfile,
@@ -15,7 +13,7 @@ import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 const AuthProviders = ({ children }) => {
-  const axiosPublic =useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
@@ -29,20 +27,19 @@ const AuthProviders = ({ children }) => {
       setUser(currentUser);
       if (currentUser) {
         // get token and store client
-        const userInfo ={email:currentUser.email}
-        axiosPublic.post('/jwt',userInfo)
-        .then(res=>{
-          if(res.data.token){
-            localStorage.setItem('access-token',res.data.token)
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+            setLoading(false);
           }
-        })
-        
+        });
       } else {
         // remove token
-        localStorage.removeItem('access-token')
+        localStorage.removeItem("access-token");
+        setLoading(false);
       }
       console.log("Current user", currentUser);
-      setLoading(false);
     });
     return () => {
       return unSubscribe;
@@ -51,7 +48,7 @@ const AuthProviders = ({ children }) => {
   //   Sing In
   const singIn = (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth,email,password)
+    return signInWithEmailAndPassword(auth, email, password);
   };
   // Google login
   const googleLogin = () => {

@@ -14,7 +14,7 @@ const Testmonials = () => {
   const [reviews, setReviews] = useState([]); // Initialize with an empty array
 
   useEffect(() => {
-    fetch("http://localhost:5000/review")
+    fetch("https://bistro-boss-srver.vercel.app/review")
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);

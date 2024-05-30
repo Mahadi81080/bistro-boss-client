@@ -1,8 +1,6 @@
 import Swal from "sweetalert2";
 import useAuth from "../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import useCart from "../Hooks/useCart";
 
@@ -26,7 +24,13 @@ const FoodCard = ({ item }) => {
       axiosSecure.post("/carts", cartItem).then((res) => {
         console.log(res.data);
         if (res.data.insertedId) {
-          toast.success(`${name} added to your cart`);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${name} added to your cart`,
+            showConfirmButton: false,
+            timer: 1000
+          });
           // refetch cart to update the cart item count
           refetch();
         }
@@ -67,7 +71,6 @@ const FoodCard = ({ item }) => {
           </button>
         </div>
       </div>
-      <ToastContainer></ToastContainer>
     </div>
   );
 };
